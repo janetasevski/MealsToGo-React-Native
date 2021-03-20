@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 import { StatusBar } from "react-native";
 import { Searchbar } from "react-native-paper";
 
-import { RestaurantInfoCard } from '../components/restaurant-info-card.component';
-
+import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 
 const SearchContainer = styled.View`
-  padding: 16px
+  padding: 16px;
 `;
 const ListContainer = styled.View`
   flex: 1;
@@ -15,7 +14,7 @@ const ListContainer = styled.View`
 `;
 const SafeArea = styled.SafeAreaView`
   flex: 1;
-  marginTop: ${StatusBar.currentHeight};
+  margin-top: ${StatusBar.currentHeight};
 `;
 
 export const RestaurantsScreen = () => {
@@ -37,4 +36,4 @@ export const RestaurantsScreen = () => {
       </ListContainer>
     </SafeArea>
   );
-}
+};

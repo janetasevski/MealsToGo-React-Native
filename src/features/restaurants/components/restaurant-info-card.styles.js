@@ -1,6 +1,9 @@
-import { Title, Paragraph } from "react-native-paper";
+import { Title, Paragraph, Card } from "react-native-paper";
 import styled from "styled-components/native";
 
+export const RestaurantCard = styled(Card)`
+  margin-bottom: ${(props) => props.theme.space[3]};
+`;
 export const Info = styled.View`
   padding: ${(props) => props.theme.space[0]};
 `;

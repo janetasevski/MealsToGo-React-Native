@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { StatusBar } from "react-native";
+import { StatusBar, FlatList } from "react-native";
 import { Searchbar } from "react-native-paper";
 
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 
 const SearchContainer = styled.View`
-  padding: ${(props) => props.theme.space[3]};
+  padding: ${(props) => props.theme.space[2]};
 `;
-const ListContainer = styled.View`
-  flex: 1;
-  padding: ${(props) => props.theme.space[3]};
-`;
+const RestaurantList = styled(FlatList).attrs({
+  contentContainerStyle: {
+    padding: 16,
+  },
+})``;
 const SafeArea = styled.SafeAreaView`
   flex: 1;
   ${StatusBar.currentHeight && `margin-top: ${StatusBar.currentHeight}px`};
@@ -31,9 +32,16 @@ export const RestaurantsScreen = () => {
           value={searchQuery}
         />
       </SearchContainer>
-      <ListContainer>
-        <RestaurantInfoCard />
-      </ListContainer>
+      <RestaurantList
+        data={[
+          { name: "Restaurant 1" },
+          { name: "Restaurant 2" },
+          { name: "Restaurant 3" },
+          { name: "Restaurant 4" },
+        ]}
+        renderItem={({ item }) => <RestaurantInfoCard restaurant={item} />}
+        keyExtractor={(item) => item.name}
+      />
     </SafeArea>
   );
 };

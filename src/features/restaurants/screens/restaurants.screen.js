@@ -1,44 +1,45 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/native";
-import { FlatList } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { FlatList, TouchableOpacity } from "react-native";
 
-import { SafeArea } from '../../../components/utility/safe-area.component';
+import { SafeArea } from "../../../components/utility/safe-area.component";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
+import { Search } from "../components/search.component";
+import { Loader } from "../../../components/utility/loader.component";
 
-const SearchContainer = styled.View`
-  padding: ${(props) => props.theme.space[2]};
-`;
+import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
+
 const RestaurantList = styled(FlatList).attrs({
   contentContainerStyle: {
     padding: 16,
   },
 })``;
 
-export const RestaurantsScreen = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+export const RestaurantsScreen = ({ navigation }) => {
+  const { restaurants, isLoading, error } = useContext(RestaurantsContext);
 
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const onPressHandler = (restaurant) => {
+    navigation.navigate("RestaurantDetail", { restaurant });
+  };
+
+  const restaurantList = isLoading ? (
+    <Loader />
+  ) : (
+    <RestaurantList
+      data={restaurants}
+      renderItem={({ item }) => (
+        <TouchableOpacity onPress={() => onPressHandler(item)}>
+          <RestaurantInfoCard restaurant={item} />
+        </TouchableOpacity>
+      )}
+      keyExtractor={(item) => item.name}
+    />
+  );
 
   return (
     <SafeArea>
-      <SearchContainer>
-        <Searchbar
-          placeholder="Search"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-      </SearchContainer>
-      <RestaurantList
-        data={[
-          { name: "Restaurant 1" },
-          { name: "Restaurant 2" },
-          { name: "Restaurant 3" },
-          { name: "Restaurant 4" },
-        ]}
-        renderItem={({ item }) => <RestaurantInfoCard restaurant={item} />}
-        keyExtractor={(item) => item.name}
-      />
+      <Search />
+      {restaurantList}
     </SafeArea>
   );
 };

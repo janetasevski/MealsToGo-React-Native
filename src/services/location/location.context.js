@@ -5,13 +5,14 @@ import { locationRequest, locationTransform } from "./location.service";
 export const LocationContext = createContext();
 
 export const LocationContextProvider = ({ children }) => {
-  const [location, setLocation] = useState({
-    lat: 37.7749295,
-    lng: -122.4194155,
-  });
+  const [location, setLocation] = useState({});
   const [keyword, setKeyword] = useState("San Francisco");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    onSearch(keyword);
+  }, []);
 
   const onSearch = (searchKeyword) => {
     setIsLoading(true);

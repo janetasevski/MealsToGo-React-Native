@@ -1,4 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
+
+import { AuthenticationContext } from "../../../services/authentication/authentication.context";
+
+import { ActivityIndicator, Colors } from "react-native-paper";
+
+import { colors } from "../../../infrastructure/theme/colors";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import {
   AccountContainer,
@@ -9,17 +15,17 @@ import {
   EmailInput,
   ErrorText,
   PasswordInput,
-  Title
+  Title,
 } from "../components/account.styles";
-import { Loader } from "../../../components/utility/loader.component";
 
-import { AuthenticationContext } from "../../../services/authentication/authentication.context";
-import { View } from "react-native";
+
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error, isLoading, clearError } = useContext(AuthenticationContext);
+  const { login, error, isLoading, clearError } = useContext(
+    AuthenticationContext
+  );
 
   useEffect(() => {
     clearError();
@@ -32,23 +38,23 @@ export const LoginScreen = ({ navigation }) => {
   return (
     <Background>
       <AccountCover />
-      
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <Title>Login</Title>
-          <AccountContainer>
-            <EmailInput value={email} onChangeText={(email) => setEmail(email)} />
-            <Spacer variant="top.medium" />
-            <PasswordInput
-              value={password}
-              onChangeText={(pass) => setPassword(pass)}
-              require
-            />
-            <Spacer variant="top.small" />
-            {error && <ErrorText>{error}</ErrorText>}
-            <Spacer variant="top.medium" />
+      <Title>Login</Title>
+      <AccountContainer>
+        <EmailInput value={email} onChangeText={(email) => setEmail(email)} />
+        <Spacer variant="top.medium" />
+        <PasswordInput
+          label="Password"
+          value={password}
+          onChangeText={(pass) => setPassword(pass)}
+          require
+        />
+        <Spacer variant="top.small" />
+        {error && <ErrorText>{error}</ErrorText>}
+        <Spacer variant="top.medium" />
+        {isLoading ? (
+          <ActivityIndicator color={Colors.blue400} />
+        ) : (
+          <>
             <AuthButton
               icon="lock-open-outline"
               disabled={isInvalid()}
@@ -58,14 +64,15 @@ export const LoginScreen = ({ navigation }) => {
             </AuthButton>
             <Spacer variant="top.large" />
             <BackButton
+              color={colors.ui.error}
               icon="arrow-left-bold-outline"
               onPress={() => navigation.goBack()}
             >
               Back
             </BackButton>
-          </AccountContainer>
-        </>
-      )}
+          </>
+        )}
+      </AccountContainer>
     </Background>
   );
 };

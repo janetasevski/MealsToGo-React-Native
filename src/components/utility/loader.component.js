@@ -4,6 +4,7 @@ import { ActivityIndicator, Colors } from "react-native-paper";
 
 export const Loader = () => {
   const Load = styled.View`
+    flex-direction: row;
     flex: 1;
     justify-content: center;
     align-items: center;

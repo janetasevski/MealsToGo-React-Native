@@ -1,6 +1,10 @@
 import React, { useState, createContext } from "react";
 
-import { loginRequest } from "./authentication.service";
+import {
+  loginRequest,
+  createUserRequest,
+  logout,
+} from "./authentication.service";
 
 export const AuthenticationContext = createContext();
 
@@ -22,9 +26,31 @@ export const AuthenticationContextProvider = ({ children }) => {
       });
   };
 
-  const clearErrorHandler = () => {
-    setError(null);
-  }
+  const onRegisterHandler = (email, password, repeatedPassword) => {
+    if (password !== repeatedPassword) {
+      setError("Password and repeated password not match");
+      return;
+    }
+    setIsLoading(true);
+    createUserRequest(email, password)
+      .then((usr) => {
+        setUser(usr);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setIsLoading(false);
+      });
+  };
+
+  const onLogoutHandler = () => {
+    setIsLoading(true);
+    logout().then(() => {
+      setUser(null);
+      setError(null);
+      setIsLoading(false);
+    });
+  };
 
   return (
     <AuthenticationContext.Provider
@@ -34,7 +60,9 @@ export const AuthenticationContextProvider = ({ children }) => {
         error,
         isAuthenticated: !!user,
         login: onLoginHandler,
-        clearError: clearErrorHandler,
+        register: onRegisterHandler,
+        logout: onLogoutHandler,
+        clearError: () => setError(null),
       }}
     >
       {children}

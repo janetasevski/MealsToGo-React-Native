@@ -1,4 +1,7 @@
 import React from "react";
+import { View, StyleSheet } from 'react-native';
+import LottieView from "lottie-react-native";
+
 import {
   Background,
   AccountCover,
@@ -13,8 +16,15 @@ export const AccountScreen = ({ navigation }) => {
   return (
     <Background>
       <AccountCover />
+      <View style={styles.animation}>
+        <LottieView
+          source={require("../../../../assets/watermelon.json")}
+          loop
+          autoPlay
+        />
+      </View>
       <Title>Meals To Go</Title>
-      <AccountContainer>
+      <AccountContainer style={styles.accountContainer}>
         <AuthButton
           icon="lock-open-outline"
           onPress={() => navigation.navigate("Login")}
@@ -29,3 +39,15 @@ export const AccountScreen = ({ navigation }) => {
     </Background>
   );
 };
+
+const styles = StyleSheet.create({
+  animation: {
+    width: "100%",
+    height: "50%",
+    position: "absolute",
+    top: 20,
+  },
+  accountContainer: {
+    width: "70%",
+  }
+});

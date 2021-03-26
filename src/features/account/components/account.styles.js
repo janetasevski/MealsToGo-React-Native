@@ -32,7 +32,6 @@ export const AuthButton = styled(Button).attrs({
 
 export const BackButton = styled(Button).attrs({
   mode: "contained",
-  color: colors.ui.error,
 })`
   padding: ${(props) => props.theme.space[1]};
   width: 95px;
@@ -57,7 +56,7 @@ export const EmailInput = styled(TextInput).attrs({
 
 export const PasswordInput = styled(TextInput).attrs({
   mode: "flat",
-  label: "Password",
+  
   textContentType: "password",
   secureTextEntry: true,
 })``;

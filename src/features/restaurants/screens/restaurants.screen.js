@@ -8,6 +8,8 @@ import { Search } from "../components/search.component";
 import { Loader } from "../../../components/utility/loader.component";
 import { FavoritesBar } from "../../../components/favorites/favorites-bar.component";
 
+import { FadeView } from '../../../components/animations/fade.animation';
+
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { FavoritesContext } from "../../../services/favorites/favorites.context";
 
@@ -29,6 +31,7 @@ export const RestaurantsScreen = ({ navigation }) => {
   const restaurantList = isLoading ? (
     <Loader />
   ) : (
+    <FadeView>
     <RestaurantList
       data={restaurants}
       renderItem={({ item }) => (
@@ -38,6 +41,7 @@ export const RestaurantsScreen = ({ navigation }) => {
       )}
       keyExtractor={(item) => item.name}
     />
+    </FadeView>
   );
 
   return (

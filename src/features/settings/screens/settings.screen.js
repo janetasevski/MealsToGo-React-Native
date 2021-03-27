@@ -1,13 +1,35 @@
-import React, { useContext } from "react";
-import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
+import React, { useContext, useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/core";
+
 import { List, Avatar } from "react-native-paper";
+import { SafeArea } from "../../../components/utility/safe-area.component";
 
 import { AuthenticationContext } from "../../../services/authentication/authentication.context";
 
-import { SafeArea } from "../../../components/utility/safe-area.component";
-
 export const SettingsScreen = ({ navigation }) => {
   const { logout, isLoadinng, user } = useContext(AuthenticationContext);
+  const [photo, setPhoto] = useState(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        getProfilePicture(user.user.uid);
+      }
+    }, [user])
+  );
+
+  const getProfilePicture = async (userId) => {
+    const photoUri = await AsyncStorage.getItem(`${userId}-photo`);
+    setPhoto(photoUri);
+  };
 
   if (isLoadinng) {
     return <ActivityIndicator />;
@@ -16,8 +38,14 @@ export const SettingsScreen = ({ navigation }) => {
   return (
     <SafeArea>
       <View style={styles.avatarContainer}>
-        <Avatar.Icon size={180} icon="human" backgroundColor="#2182BD" />
-        <Text style={styles.avatarText} >{user?.user?.email}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
+          {!photo ? (
+            <Avatar.Icon size={180} icon="human" backgroundColor="#2182BD" />
+          ) : (
+            <Avatar.Image size={180} source={{ uri: photo }} />
+          )}
+        </TouchableOpacity>
+        <Text style={styles.avatarText}>{user?.user?.email}</Text>
       </View>
       <List.Section>
         <List.Item
@@ -45,7 +73,7 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     marginTop: 10,
-    fontFamily: "Oswald_400Regular"
+    fontFamily: "Oswald_400Regular",
   },
   settingsItem: {
     padding: 16,
